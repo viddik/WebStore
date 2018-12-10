@@ -42,9 +42,14 @@ namespace WebStore.Services.Sql
         public IEnumerable<ProductDto> GetProducts(ProductFilter filter)
         {
             var query = _context.Products.Include("Brand").Include("Section").AsQueryable();
+            
+            // Фильтр по вхождению в список id
+            if (filter?.Ids?.Count > 0)
+                query = query.Where(c => filter.Ids.Contains(c.Id));
+            // Фильтр по бренду
             if (filter.BrandId.HasValue)
-                query = query.Where(c => c.BrandId.HasValue &&
-                c.BrandId.Value.Equals(filter.BrandId.Value));
+                query = query.Where(c => c.BrandId.HasValue && c.BrandId.Value.Equals(filter.BrandId.Value));
+            // Фильтр по секции
             if (filter.SectionId.HasValue)
                 query = query.Where(c => c.SectionId.Equals(filter.SectionId.Value));
 

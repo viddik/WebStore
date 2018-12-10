@@ -16,6 +16,6 @@ namespace WebStore.Interfaces.Services
 
         CartViewModel TransformCart();
 
-        IEnumerable<OrderItemDto> GetOrderItems();
+        IList<OrderItemDto> GetOrderItems();
     }
 }

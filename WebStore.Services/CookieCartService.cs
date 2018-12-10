@@ -159,7 +159,7 @@ namespace WebStore.Services
             return r;
         }
 
-        public IEnumerable<OrderItemDto> GetOrderItems()
+        public IList<OrderItemDto> GetOrderItems()
         {
             var result = _productData.GetProducts(new ProductFilter()
             {
@@ -168,11 +168,11 @@ namespace WebStore.Services
             {
                 ProductId = p.Id,
                 Price = p.Price
-            });
+            }).ToList();
 
             foreach (var item in result)
             {
-                var cartItem = Cart.Items.FirstOrDefault(ci => ci.ProductId == item.ProductId);
+                var cartItem = Cart.Items.First(ci => ci.ProductId == item.ProductId);
                 if (cartItem != null)
                     item.Quantity = cartItem.Quantity;
             }
