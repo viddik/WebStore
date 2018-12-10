@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using WebStore.Infrastructure.Interfaces;
-using WebStore.Infrastructure.Implementations;
-using WebStore.DAL.Context;
-using Microsoft.EntityFrameworkCore;
-using WebStore.Infrastructure.Implementations.Sql;
-using WebStore.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using WebStore.Interfaces.Clients;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using WebStore.Clients;
+using WebStore.Clients.Services.Employees;
+using WebStore.Clients.Services.Orders;
+using WebStore.Clients.Services.Products;
+using WebStore.DAL.Context;
+using WebStore.Domain.Entities;
+using WebStore.Interfaces.Clients;
+using WebStore.Interfaces.Services;
+using WebStore.Services;
+using WebStore.Services.InMemory;
+using WebStore.Services.Sql;
 
 namespace WebStore
 {
@@ -46,12 +47,14 @@ namespace WebStore
 
             // Внедрение зависимостей
             // Singleton-объекты создаются один раз при запуске приложения, и при всех запросах к приложению оно использует один и тот же singleton-объект
-            services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+            //services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             // Scoped-объекты создаются по одному на каждый запрос
-            services.AddScoped<IProductData, SqlProductData>();
+            //services.AddScoped<IProductData, SqlProductData>();
             // Transient-объекты создаются каждый раз, когда нам требуется экземпляр определенного класса
             // Подробнее см https://metanit.com/sharp/aspnet5/6.5.php
-            services.AddTransient<IOrdersService, SqlOrdersService>();
+            services.AddTransient<IEmployeesData, EmployeesClient>();
+            services.AddTransient<IProductData, ProductsClient>();
+            services.AddTransient<IOrdersService, OrdersClient>();
 
             // Подключение БД
             services.AddDbContext<WebStoreContext>(options => options.UseSqlServer(

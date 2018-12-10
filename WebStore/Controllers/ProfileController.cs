@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebStore.Infrastructure.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using WebStore.Interfaces.Services;
 using WebStore.Models.Order;
 
 namespace WebStore.Controllers
@@ -40,4 +40,4 @@ namespace WebStore.Controllers
             return View(orderModels);
         }
     }
-}
+}

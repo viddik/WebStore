@@ -1,6 +1,8 @@
-﻿using WebStore.Models.Cart;
+﻿using System.Collections.Generic;
+using WebStore.Domain.Dto.Order;
+using WebStore.Models.Cart;
 
-namespace WebStore.Infrastructure.Interfaces
+namespace WebStore.Interfaces.Services
 {
     public interface ICartService
     {
@@ -13,5 +15,7 @@ namespace WebStore.Infrastructure.Interfaces
         void AddToCart(int id);
 
         CartViewModel TransformCart();
+
+        IEnumerable<OrderItemDto> GetOrderItems();
     }
 }

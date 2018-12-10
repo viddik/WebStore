@@ -9,4 +9,4 @@ namespace WebStore.Domain.Entities
         public decimal Price { get; set; }
         public int Quantity { get; set; }
     }
-}
+}

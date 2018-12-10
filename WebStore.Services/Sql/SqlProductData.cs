@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using WebStore.DAL.Context;
+using WebStore.Domain.Dto.Product;
 using WebStore.Domain.Entities;
 using WebStore.Domain.Filters;
-using WebStore.Infrastructure.Interfaces;
+using WebStore.Interfaces.Services;
 
-namespace WebStore.Infrastructure.Implementations.Sql
+namespace WebStore.Services.Sql
 {
     public class SqlProductData : IProductData
     {
@@ -17,17 +18,28 @@ namespace WebStore.Infrastructure.Implementations.Sql
             _context = context;
         }
 
-        public IEnumerable<Section> GetSections()
+        public IEnumerable<SectionDto> GetSections()
         {
-            return _context.Sections.ToList();
+            return _context.Sections.Select(s => new SectionDto()
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Order = s.Order,
+                ParentId = s.ParentId
+            }).ToList();
         }
 
-        public IEnumerable<Brand> GetBrands()
+        public IEnumerable<BrandDto> GetBrands()
         {
-            return _context.Brands.ToList();
+            return _context.Brands.Select(b => new BrandDto()
+            {
+                Id = b.Id,
+                Name = b.Name,
+                Order = b.Order
+            }).ToList();
         }
 
-        public IEnumerable<Product> GetProducts(ProductFilter filter)
+        public IEnumerable<ProductDto> GetProducts(ProductFilter filter)
         {
             var query = _context.Products.Include("Brand").Include("Section").AsQueryable();
             if (filter.BrandId.HasValue)
@@ -35,12 +47,35 @@ namespace WebStore.Infrastructure.Implementations.Sql
                 c.BrandId.Value.Equals(filter.BrandId.Value));
             if (filter.SectionId.HasValue)
                 query = query.Where(c => c.SectionId.Equals(filter.SectionId.Value));
-            return query.ToList();
+
+            return query.Select(p => new ProductDto()
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Order = p.Order,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                Brand = p.BrandId.HasValue ? new BrandDto() { Id = p.Brand.Id, Name = p.Brand.Name } : null
+            }).ToList();
         }
 
-        public Product GetProductById(int id)
+        public ProductDto GetProductById(int id)
         {
-            return _context.Products.Include("Brand").Include("Section").FirstOrDefault(p => p.Id.Equals(id));
+            ProductDto result = null;
+            var product = _context.Products.Include("Brand").Include("Section").FirstOrDefault(p => p.Id.Equals(id));
+            if (product != null)
+            {
+                result = new ProductDto()
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Order = product.Order,
+                    Price = product.Price,
+                    ImageUrl = product.ImageUrl,
+                    Brand = product.BrandId.HasValue ? new BrandDto() { Id = product.Brand.Id, Name = product.Brand.Name } : null
+                };
+            }
+            return result;
         }
     }
 }

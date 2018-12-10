@@ -3,12 +3,14 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WebStore.Domain.Dto.Order;
+using WebStore.Domain.Dto.Product;
 using WebStore.Domain.Filters;
-using WebStore.Infrastructure.Interfaces;
+using WebStore.Interfaces.Services;
 using WebStore.Models;
 using WebStore.Models.Cart;
 
-namespace WebStore.Infrastructure.Implementations
+namespace WebStore.Services
 {
     public class CookieCartService : ICartService
     {
@@ -155,6 +157,27 @@ namespace WebStore.Infrastructure.Implementations
                 Items = Cart.Items.ToDictionary(x => products.First(y => y.Id == x.ProductId), x => x.Quantity)
             };
             return r;
+        }
+
+        public IEnumerable<OrderItemDto> GetOrderItems()
+        {
+            var result = _productData.GetProducts(new ProductFilter()
+            {
+                Ids = Cart.Items.Select(i => i.ProductId).ToList()
+            }).Select(p => new OrderItemDto()
+            {
+                ProductId = p.Id,
+                Price = p.Price
+            });
+
+            foreach (var item in result)
+            {
+                var cartItem = Cart.Items.FirstOrDefault(ci => ci.ProductId == item.ProductId);
+                if (cartItem != null)
+                    item.Quantity = cartItem.Quantity;
+            }
+
+            return result;
         }
     }
 }

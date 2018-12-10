@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using WebStore.Infrastructure.Interfaces;
+using WebStore.Interfaces.Services;
 using WebStore.Models;
 
-namespace WebStore.Infrastructure.Implementations
+namespace WebStore.Services.InMemory
 {
     public class InMemoryEmployeesData : IEmployeesData
     {
@@ -44,6 +43,30 @@ namespace WebStore.Infrastructure.Implementations
         }
 
         /// <summary>
+        /// Обновление сотрудника
+        /// </summary>
+        /// <param name="id">Id сотрудника</param>
+        /// <param name="entity">Сотрудник для обновления</param>
+        /// <returns></returns>
+        public EmployeeView UpdateEmployee(int id, EmployeeView entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            var employee = _employees.FirstOrDefault(e => e.Id.Equals(id));
+            if (employee == null)
+                throw new InvalidOperationException("Employee not exits");
+
+            employee.Age = entity.Age;
+            employee.FirstName = entity.FirstName;
+            employee.Patronymic = entity.Patronymic;
+            employee.SurName = entity.SurName;
+            employee.Position = entity.Position;
+            return employee;
+        }
+
+
+        /// <summary>
         /// Добавление нового сотрудника
         /// </summary>
         /// <param name="model"></param>
@@ -65,9 +88,6 @@ namespace WebStore.Infrastructure.Implementations
                 _employees.Remove(employee);
             }
         }
-
-        
-
         
     }
 }

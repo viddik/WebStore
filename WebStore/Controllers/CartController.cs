@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebStore.Infrastructure.Interfaces;
+using System.Linq;
+using WebStore.Domain.Dto.Order;
+using WebStore.Interfaces.Services;
 using WebStore.Models.Cart;
 using WebStore.Models.Order;
 
@@ -77,8 +79,11 @@ namespace WebStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var orderResult = _ordersService.CreateOrder(model, _cartService.TransformCart(), 
-                    User.Identity.Name);
+                CreateOrderModel createModel = new CreateOrderModel();
+                createModel.OrderViewModel = model;
+                createModel.OrderItems = _cartService.GetOrderItems().ToList();
+
+                var orderResult = _ordersService.CreateOrder(createModel, User.Identity.Name);
                 _cartService.RemoveAll();
                 return RedirectToAction("OrderConfirmed", new { id = orderResult.Id });
             }
@@ -95,6 +100,7 @@ namespace WebStore.Controllers
         {
             ViewBag.OrderId = id;
             return View();
-        }
+        }
+
     }
 }

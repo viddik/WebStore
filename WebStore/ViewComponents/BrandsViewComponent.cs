@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Domain.Filters;
-using WebStore.Infrastructure.Interfaces;
+using WebStore.Interfaces.Services;
 using WebStore.Models;
 
 namespace WebStore.ViewComponents
@@ -32,7 +32,7 @@ namespace WebStore.ViewComponents
                 Id = b.Id,
                 Name = b.Name,
                 Order = b.Order,
-                ProductsCount = dbProducts.Count(p => p.BrandId.Equals(b.Id))
+                ProductsCount = dbProducts.Count(p => p.Brand.Id.Equals(b.Id))
             }).OrderBy(b => b.Order).ToList();
         }
     }

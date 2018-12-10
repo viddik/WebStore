@@ -15,6 +15,7 @@ namespace WebStore.Models.Cart
             {
                 return Items?.Sum(x => x.Value) ?? 0;
             }
-        }
+        }
+
     }
 }

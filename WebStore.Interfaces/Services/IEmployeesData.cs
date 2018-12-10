@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Models;
 
-namespace WebStore.Infrastructure.Interfaces
+namespace WebStore.Interfaces.Services
 {
     public interface IEmployeesData
     {
@@ -20,6 +20,14 @@ namespace WebStore.Infrastructure.Interfaces
         /// <param name="id">Id</param>
         /// <returns></returns>
         EmployeeView GetById(int id);
+
+        /// <summary>
+        /// Обновление сотрудника
+        /// </summary>
+        /// <param name="id">Id сотрудника</param>
+        /// <param name="entity">Сотрудник для обновления</param>
+        /// <returns></returns>
+        EmployeeView UpdateEmployee(int id, EmployeeView entity);
 
         /// <summary>
         /// Добавить нового
