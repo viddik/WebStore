@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -10,13 +9,11 @@ using WebStore.Clients;
 using WebStore.Clients.Services.Employees;
 using WebStore.Clients.Services.Orders;
 using WebStore.Clients.Services.Products;
-using WebStore.DAL.Context;
+using WebStore.Clients.Services.Users;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Clients;
 using WebStore.Interfaces.Services;
 using WebStore.Services;
-using WebStore.Services.InMemory;
-using WebStore.Services.Sql;
 
 namespace WebStore
 {
@@ -55,15 +52,39 @@ namespace WebStore
             services.AddTransient<IEmployeesData, EmployeesClient>();
             services.AddTransient<IProductData, ProductsClient>();
             services.AddTransient<IOrdersService, OrdersClient>();
+            services.AddTransient<IValuesService, ValuesClient>();
 
             // Подключение БД
-            services.AddDbContext<WebStoreContext>(options => options.UseSqlServer(
-                Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<WebStoreContext>(options => options.UseSqlServer(
+            //    Configuration.GetConnectionString("DefaultConnection")));
 
             // Подключение Microsoft.AspNetCore.Identity
+            //services.AddIdentity<User, IdentityRole>()
+            //    .AddEntityFrameworkStores<WebStoreContext>()
+            //    .AddDefaultTokenProviders();
+
+            // Настройка Identity
             services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<WebStoreContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddTransient<IUserStoreClient, UserStoreClient>();
+
+            // ПРОБЛЕМА:
+            // Не получается заменить UsersClient на UserStoreClient,
+            // замена вызывает падение SignInManager<User> _signInManager
+            // в WebStore.Controllers.AccountController,
+            // в методе public async Task<IActionResult> Login(LoginViewModel model)
+            services.AddTransient<IUserStore<User>, UsersClient>();
+
+            services.AddTransient<IUserRoleStore<User>, UserRoleClient>();
+            services.AddTransient<IUserClaimStore<User>, UserClaimClient>();
+            services.AddTransient<IUserPasswordStore<User>, UserPasswordClient>();
+            services.AddTransient<IUserTwoFactorStore<User>, UserTwoFactorClient>();
+            services.AddTransient<IUserEmailStore<User>, UserEmailClient>();
+            services.AddTransient<IUserPhoneNumberStore<User>, UserPhoneNumberClient>();
+            services.AddTransient<IUserLoginStore<User>, UserLoginClient>();
+            services.AddTransient<IUserLockoutStore<User>, UserLockoutClient>();
+            services.AddTransient<IRoleStore<IdentityRole>, RolesClient>();
 
             // Конфигурация Identity
             services.Configure<IdentityOptions>(options =>
@@ -83,7 +104,7 @@ namespace WebStore
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                options.Cookie.Expiration = TimeSpan.FromHours(1);
+                options.Cookie.Expiration = TimeSpan.FromMinutes(30);
                 options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to / Account / Login
                 options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to / Account / Logout
                 options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to / Account / AccessDenied
@@ -92,11 +113,7 @@ namespace WebStore
 
             // Настройки для корзины
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<ICartService, CookieCartService>();
-
-            // Добавляем реализацию клиента
-            services.AddTransient<IValuesService, ValuesClient>();
-
+            services.AddTransient<ICartService, CookieCartService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,8 +127,6 @@ namespace WebStore
             // Включаем расширение для использования статических файлов,
             // т.к. appsettings.json - статический файл
             app.UseStaticFiles();
-
-            var hello = Configuration["CustomHelloWorld"];
 
             // Добавляем аутентификацию
             app.UseAuthentication();

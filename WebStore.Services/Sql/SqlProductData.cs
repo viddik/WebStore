@@ -44,7 +44,7 @@ namespace WebStore.Services.Sql
             var query = _context.Products.Include("Brand").Include("Section").AsQueryable();
             
             // Фильтр по вхождению в список id
-            if (filter?.Ids?.Count > 0)
+            if (filter.Ids?.Count > 0)
                 query = query.Where(c => filter.Ids.Contains(c.Id));
             // Фильтр по бренду
             if (filter.BrandId.HasValue)
