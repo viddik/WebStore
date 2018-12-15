@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using WebStore.Clients;
 using WebStore.Clients.Services.Employees;
@@ -13,7 +14,9 @@ using WebStore.Clients.Services.Users;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Clients;
 using WebStore.Interfaces.Services;
+using WebStore.Logger;
 using WebStore.Services;
+using WebStore.Services.Middleware;
 
 namespace WebStore
 {
@@ -117,12 +120,16 @@ namespace WebStore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            // Включаем логирование Log4Net
+            loggerFactory.AddLog4Net();
+
+            // Добавляем middleware для обработки исключений
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
+            else
+                app.UseExceptionHandler("/Home/Error");
 
             // Включаем расширение для использования статических файлов,
             // т.к. appsettings.json - статический файл
@@ -130,6 +137,12 @@ namespace WebStore
 
             // Добавляем аутентификацию
             app.UseAuthentication();
+
+            // Назначаем URL для отображение ошибочных статусов HTTP
+            app.UseStatusCodePagesWithRedirects("~/home/errorstatus/{0}");
+
+            // Добавляем middleware для логирования исключений
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             // Добавляем​​ обработку​​ запросов​​ в​​ mvc-формате
             app.UseMvc(routes =>

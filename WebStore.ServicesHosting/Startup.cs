@@ -5,12 +5,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using WebStore.DAL.Context;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
+using WebStore.Logger;
 using WebStore.Services;
 using WebStore.Services.InMemory;
+using WebStore.Services.Middleware;
 using WebStore.Services.Sql;
 
 namespace WebStore.ServicesHosting
@@ -45,13 +48,20 @@ namespace WebStore.ServicesHosting
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            // Включаем логирование Log4Net
+            loggerFactory.AddLog4Net();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            // Добавляем middleware для логирования исключений
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+
+            // Добавляем​​ обработку​​ запросов​​ в​​ mvc-формате
             app.UseMvc();
         }
     }
