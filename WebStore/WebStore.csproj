@@ -12,8 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\CookieCartService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Services\" />
     <Folder Include="Views\Home\Partial\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>

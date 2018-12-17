@@ -77,22 +77,33 @@ namespace WebStore.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult CheckOut(OrderViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                CreateOrderModel createModel = new CreateOrderModel();
-                createModel.OrderViewModel = model;
-                createModel.OrderItems = _cartService.GetOrderItems().ToList();
-
-                var orderResult = _ordersService.CreateOrder(createModel, User.Identity.Name);
-                _cartService.RemoveAll();
-                return RedirectToAction("OrderConfirmed", new { id = orderResult.Id });
-            }
-
             var detailsModel = new DetailsViewModel()
             {
                 CartViewModel = _cartService.TransformCart(),
                 OrderViewModel = model
             };
+
+            if (ModelState.IsValid)
+            {
+                CreateOrderModel createModel = new CreateOrderModel();
+                createModel.OrderViewModel = model;
+
+                //var orderItems = _cartService.GetOrderItems();
+                //if (orderItems == null || orderItems.Count == 0)
+                //{
+                //    ModelState.AddModelError("error", "InvalidModel");
+                //    return View("Details", detailsModel);
+                //}
+                //createModel.OrderItems = orderItems.ToList();
+
+                createModel.OrderItems = _cartService.GetOrderItems()?.ToList();
+
+                var orderResult = _ordersService.CreateOrder(createModel, User.Identity.Name);
+                _cartService.RemoveAll();
+
+                return RedirectToAction("OrderConfirmed", new { id = orderResult.Id });
+            }
+                        
             return View("Details", detailsModel);
         }
 

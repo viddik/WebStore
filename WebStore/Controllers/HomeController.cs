@@ -63,7 +63,8 @@ namespace WebStore.Controllers
         public IActionResult Error()
         {
             return View();
-        }
+        }
+
         public IActionResult NotFound()
         {
             return View();
