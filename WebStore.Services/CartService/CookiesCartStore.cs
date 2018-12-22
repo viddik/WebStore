@@ -7,7 +7,8 @@ using WebStore.Models.Cart;
 
 namespace WebStore.Services.CartService
 {
-    public class CookiesCartStore : ICartStore
+    public class CookiesCartStore : ICartStore
+
     {
         // доступ к HttpContext
         private readonly IHttpContextAccessor _httpContextAccessor;

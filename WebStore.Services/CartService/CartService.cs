@@ -21,7 +21,8 @@ namespace WebStore.Services.CartService
         public CartService(IProductData productData, ICartStore cartStore)
         {
             _productData = productData;
-            _cartStore = cartStore;        }
+            _cartStore = cartStore;
+        }
 
         /// <summary>
         /// Уменьшает количество товара id
