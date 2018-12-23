@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using WebStore.Models.Order;
+using WebStore.Domain.ViewModel.Order;
 
 namespace WebStore.Domain.Dto.Order
 {

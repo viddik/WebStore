@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebStore.Models.Cart
+namespace WebStore.Domain.ViewModel.Cart
 {
     public class CartItem
     {

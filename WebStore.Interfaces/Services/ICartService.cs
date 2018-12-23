@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using WebStore.Domain.Dto.Order;
-using WebStore.Models.Cart;
+using WebStore.Domain.ViewModel.Cart;
 
 namespace WebStore.Interfaces.Services
 {

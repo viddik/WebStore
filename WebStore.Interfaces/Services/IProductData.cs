@@ -14,10 +14,24 @@ namespace WebStore.Interfaces.Services
         IEnumerable<SectionDto> GetSections();
 
         /// <summary>
+        /// Секция по Id
+        /// </summary>
+        /// <param name="id">Id</param>
+        /// <returns></returns>
+        SectionDto GetSectionById(int id);
+
+        /// <summary>
         /// Список брендов
         /// </summary>
         /// <returns></returns>
         IEnumerable<BrandDto> GetBrands();
+
+        /// <summary>
+        /// Бренд по Id
+        /// </summary>
+        /// <param name="id">Id</param>
+        /// <returns></returns>
+        BrandDto GetBrandById(int id);
 
         /// <summary>
         /// Список товаров

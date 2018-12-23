@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WebStore.Domain.ViewModel;
 using WebStore.Interfaces.Services;
-using WebStore.Models;
 
 namespace WebStore.Services.InMemory
 {

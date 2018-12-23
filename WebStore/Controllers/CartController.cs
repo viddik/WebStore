@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using WebStore.Domain.Dto.Order;
+using WebStore.Domain.ViewModel.Cart;
+using WebStore.Domain.ViewModel.Order;
 using WebStore.Interfaces.Services;
-using WebStore.Models.Cart;
-using WebStore.Models.Order;
 
 namespace WebStore.Controllers
 {

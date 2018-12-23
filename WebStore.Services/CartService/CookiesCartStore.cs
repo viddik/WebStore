@@ -2,8 +2,8 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using WebStore.Domain.ViewModel.Cart;
 using WebStore.Interfaces.Services;
-using WebStore.Models.Cart;
 
 namespace WebStore.Services.CartService
 {

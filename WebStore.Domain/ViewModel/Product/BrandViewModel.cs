@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebStore.Domain.Entities.Base;
+﻿using WebStore.Domain.Entities.Base;
 
-namespace WebStore.Models
+namespace WebStore.Domain.ViewModel.Product
 {
     public class BrandViewModel : NamedOrderedEntity
     {

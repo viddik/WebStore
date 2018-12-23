@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using WebStore.Domain.Dto.Order;
-using WebStore.Domain.Dto.Product;
 using WebStore.Domain.Filters;
+using WebStore.Domain.ViewModel.Cart;
+using WebStore.Domain.ViewModel.Product;
 using WebStore.Interfaces.Services;
-using WebStore.Models;
-using WebStore.Models.Cart;
 
 namespace WebStore.Services.CartService
 {
@@ -95,7 +91,7 @@ namespace WebStore.Services.CartService
                 new ProductFilter()
                 {
                     Ids = _cartStore.Cart.Items.Select(i => i.ProductId).ToList()
-                }).Select(p => new ProductViewModel()
+                }).Select(p => new ProductItemViewModel()
                     {
                         Id = p.Id,
                         ImageUrl = p.ImageUrl,

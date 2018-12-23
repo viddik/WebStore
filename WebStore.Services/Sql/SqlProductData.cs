@@ -29,6 +29,23 @@ namespace WebStore.Services.Sql
             }).ToList();
         }
 
+        public SectionDto GetSectionById(int id)
+        {
+            SectionDto result = null;
+            var section = _context.Sections.FirstOrDefault(s => s.Id == id);
+            if (section != null)
+            {
+                result = new SectionDto
+                {
+                    Id = section.Id,
+                    Name = section.Name,
+                    Order = section.Order,
+                    ParentId = section.ParentId
+                };
+            }
+            return result;
+        }
+
         public IEnumerable<BrandDto> GetBrands()
         {
             return _context.Brands.Select(b => new BrandDto()
@@ -37,6 +54,22 @@ namespace WebStore.Services.Sql
                 Name = b.Name,
                 Order = b.Order
             }).ToList();
+        }
+
+        public BrandDto GetBrandById(int id)
+        {
+            BrandDto result = null;
+            var brand = _context.Brands.FirstOrDefault(s => s.Id == id);
+            if (brand != null)
+            {
+                result = new BrandDto
+                {
+                    Id = brand.Id,
+                    Name = brand.Name,
+                    Order = brand.Order
+                };
+            }
+            return result;
         }
 
         public IEnumerable<ProductDto> GetProducts(ProductFilter filter)
@@ -60,7 +93,8 @@ namespace WebStore.Services.Sql
                 Order = p.Order,
                 Price = p.Price,
                 ImageUrl = p.ImageUrl,
-                Brand = p.BrandId.HasValue ? new BrandDto() { Id = p.Brand.Id, Name = p.Brand.Name } : null
+                Brand = p.BrandId.HasValue ? new BrandDto() { Id = p.Brand.Id, Name = p.Brand.Name } : null,
+                Section = new SectionDto() { Id = p.SectionId, Name = p.Section.Name }
             }).ToList();
         }
 
@@ -77,7 +111,8 @@ namespace WebStore.Services.Sql
                     Order = product.Order,
                     Price = product.Price,
                     ImageUrl = product.ImageUrl,
-                    Brand = product.BrandId.HasValue ? new BrandDto() { Id = product.Brand.Id, Name = product.Brand.Name } : null
+                    Brand = product.BrandId.HasValue ? new BrandDto() { Id = product.Brand.Id, Name = product.Brand.Name } : null,
+                    Section = new SectionDto() { Id = product.SectionId, Name = product.Section.Name }
                 };
             }
             return result;

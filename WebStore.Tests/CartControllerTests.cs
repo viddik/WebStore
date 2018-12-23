@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using WebStore.Controllers;
 using WebStore.Domain.Dto.Order;
+using WebStore.Domain.ViewModel.Cart;
+using WebStore.Domain.ViewModel.Order;
+using WebStore.Domain.ViewModel.Product;
 using WebStore.Interfaces.Services;
-using WebStore.Models;
-using WebStore.Models.Cart;
-using WebStore.Models.Order;
 using Assert = Xunit.Assert;
 
 namespace WebStore.Tests
@@ -51,9 +51,9 @@ namespace WebStore.Tests
             mockCartService.Setup(c => c.TransformCart()).Returns(
                 new CartViewModel()
                 {
-                    Items = new Dictionary<ProductViewModel, int>()
+                    Items = new Dictionary<ProductItemViewModel, int>()
                     {
-                        { new ProductViewModel(), 1 }
+                        { new ProductItemViewModel(), 1 }
                     }
                 });
 

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using WebStore.Domain.Dto.Product;
 using WebStore.Domain.Filters;
+using WebStore.Domain.ViewModel.Cart;
+using WebStore.Domain.ViewModel.Product;
 using WebStore.Interfaces.Services;
-using WebStore.Models;
-using WebStore.Models.Cart;
 using WebStore.Services.CartService;
 using Assert = Xunit.Assert;
 namespace WebStore.Tests
@@ -42,10 +42,10 @@ namespace WebStore.Tests
         {
             var cartViewModel = new CartViewModel()
             {
-                Items = new Dictionary<ProductViewModel, int>()
+                Items = new Dictionary<ProductItemViewModel, int>()
                 {
                     {
-                        new ProductViewModel()
+                        new ProductItemViewModel()
                         {
                             Id = 1,
                             Name = "TestItem",
@@ -54,7 +54,7 @@ namespace WebStore.Tests
                         1
                     },
                     {
-                        new ProductViewModel()
+                        new ProductItemViewModel()
                         {
                             Id = 2,
                             Name = "TestItem2",

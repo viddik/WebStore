@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using WebStore.Domain.Filters;
+using WebStore.Domain.ViewModel.Product;
 using WebStore.Interfaces.Services;
-using WebStore.Models;
 
 namespace WebStore.Controllers
 {
@@ -25,21 +25,37 @@ namespace WebStore.Controllers
                 }
             );
 
+            var sections = _productData.GetSections();
+            var brands = _productData.GetBrands();
+            var title = "Товары";
+            if (sectionId.HasValue)
+            {
+                title = sections.FirstOrDefault(c => c.Id == sectionId)?.Name;
+            }
+            else if (brandId.HasValue)
+            {
+                title = brands.FirstOrDefault(c => c.Id == brandId)?.Name;
+            }
+
             var model = new CatalogViewModel()
             {
                 BrandId = brandId,
                 SectionId = sectionId,
-                Products = products.Select(p => 
-                    new ProductViewModel()
-                    {
-                        Id = p.Id,
-                        ImageUrl = p.ImageUrl,
-                        Name = p.Name,
-                        Order = p.Order,
-                        Price = p.Price,
-                        Brand = p.Brand != null ? p.Brand.Name : string.Empty
-                    }
-                ).OrderBy(p => p.Order).ToList()
+                ProductsViewModel = new ProductsViewModel()
+                {
+                    Title = title,
+                    Products = products.Select(p =>
+                        new ProductItemViewModel()
+                        {
+                            Id = p.Id,
+                            ImageUrl = p.ImageUrl,
+                            Name = p.Name,
+                            Order = p.Order,
+                            Price = p.Price,
+                            Brand = p.Brand != null ? p.Brand.Name : string.Empty
+                        }
+                    ).OrderBy(p => p.Order).ToList()
+                }
             };
 
             return View(model);
@@ -51,7 +67,7 @@ namespace WebStore.Controllers
             if (product == null)
                 return NotFound();
 
-            return View(new ProductViewModel
+            return View(new ProductItemViewModel
             {
                 Id = product.Id,
                 ImageUrl = product.ImageUrl,

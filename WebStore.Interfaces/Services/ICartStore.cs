@@ -1,4 +1,4 @@
-﻿using WebStore.Models.Cart;
+﻿using WebStore.Domain.ViewModel.Cart;
 
 namespace WebStore.Interfaces.Services
 {
@@ -6,4 +6,4 @@ namespace WebStore.Interfaces.Services
     {
         Cart Cart { get; set; }
     }
-}
+}

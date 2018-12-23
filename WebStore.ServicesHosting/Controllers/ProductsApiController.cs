@@ -28,11 +28,25 @@ namespace WebStore.ServicesHosting.Controllers
             return _productData.GetSections();
         }
 
+        // GET api/products/sections/{id}
+        [HttpGet("sections/{id}")]
+        public SectionDto GetSectionById(int id)
+        {
+            return _productData.GetSectionById(id);
+        }
+
         // GET api/products/brands
         [HttpGet("brands")]
         public IEnumerable<BrandDto> GetBrands()
         {
             return _productData.GetBrands();
+        }
+
+        // GET api/products/brands/{id}
+        [HttpGet("brands/{id}")]
+        public BrandDto GetBrandById(int id)
+        {
+            return _productData.GetBrandById(id);
         }
 
         // POST api/products
@@ -43,7 +57,7 @@ namespace WebStore.ServicesHosting.Controllers
         }
 
         // GET api/products/{id}
-        [HttpGet("{id})")]
+        [HttpGet("{id}")]
         public ProductDto GetProductById(int id)
         {
             return _productData.GetProductById(id);

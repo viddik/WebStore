@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.Collections.Generic;
+using System.Linq;
 using WebStore.Controllers;
 using WebStore.Domain.Dto.Product;
 using WebStore.Domain.Filters;
+using WebStore.Domain.ViewModel.Product;
 using WebStore.Interfaces.Services;
-using WebStore.Models;
 
 namespace WebStore.Tests
 {
@@ -39,7 +39,7 @@ namespace WebStore.Tests
 
             // Assert
             var viewResult = Xunit.Assert.IsType<ViewResult>(result);
-            var model = Xunit.Assert.IsAssignableFrom<ProductViewModel>(viewResult.ViewData.Model);
+            var model = Xunit.Assert.IsAssignableFrom<ProductItemViewModel>(viewResult.ViewData.Model);
             Xunit.Assert.Equal(1, model.Id);
             Xunit.Assert.Equal("Test", model.Name);
             Xunit.Assert.Equal(10, model.Price);
@@ -103,10 +103,10 @@ namespace WebStore.Tests
             // Assert
             var viewResult = Xunit.Assert.IsType<ViewResult>(result);
             var model = Xunit.Assert.IsAssignableFrom<CatalogViewModel>(viewResult.ViewData.Model);
-            Xunit.Assert.Equal(2, model.Products.Count());
+            Xunit.Assert.Equal(2, model.ProductsViewModel.Products.Count());
             Xunit.Assert.Equal(5, model.BrandId);
             Xunit.Assert.Equal(1, model.SectionId);
-            Xunit.Assert.Equal("TestImage2.jpg", model.Products.ToList()[1].ImageUrl);
+            Xunit.Assert.Equal("TestImage2.jpg", model.ProductsViewModel.Products.ToList()[1].ImageUrl);
         }
     }
 }

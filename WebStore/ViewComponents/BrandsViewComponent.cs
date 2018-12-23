@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Domain.Filters;
+using WebStore.Domain.ViewModel.Product;
 using WebStore.Interfaces.Services;
-using WebStore.Models;
 
 namespace WebStore.ViewComponents
 {
@@ -17,22 +17,26 @@ namespace WebStore.ViewComponents
             _productData = productData;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(string brandId)
         {
+            int.TryParse(brandId, out var brandIdResult);
             var brands = GetBrands();
-            return View(brands);
+            return View(new BrandCompleteViewModel()
+            {
+                Brands = brands,
+                CurrentBrandId = brandIdResult
+            });
         }
 
         private IEnumerable<BrandViewModel> GetBrands()
         {
             var dbBrands = _productData.GetBrands();
-            var dbProducts = _productData.GetProducts(new ProductFilter());
             return dbBrands.Select(b => new BrandViewModel
             {
                 Id = b.Id,
                 Name = b.Name,
                 Order = b.Order,
-                ProductsCount = dbProducts.Count(p => p.Brand.Id.Equals(b.Id))
+                ProductsCount = 0
             }).OrderBy(b => b.Order).ToList();
         }
     }
