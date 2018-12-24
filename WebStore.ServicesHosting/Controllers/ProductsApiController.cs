@@ -33,7 +33,8 @@ namespace WebStore.ServicesHosting.Controllers
         public SectionDto GetSectionById(int id)
         {
             return _productData.GetSectionById(id);
-        }
+        }
+
 
         // GET api/products/brands
         [HttpGet("brands")]
@@ -51,7 +52,7 @@ namespace WebStore.ServicesHosting.Controllers
 
         // POST api/products
         [HttpPost]
-        public IEnumerable<ProductDto> GetProducts([FromBody]ProductFilter filter)
+        public PagedProductDto GetProducts([FromBody]ProductFilter filter)
         {
             return _productData.GetProducts(filter);
         }

@@ -31,14 +31,15 @@ namespace WebStore.Interfaces.Services
         /// </summary>
         /// <param name="id">Id</param>
         /// <returns></returns>
-        BrandDto GetBrandById(int id);
+        BrandDto GetBrandById(int id);
+
 
         /// <summary>
         /// Список товаров
         /// </summary>
         /// <param name="filter">Фильтр товаров</param>
         /// <returns></returns>
-        IEnumerable<ProductDto> GetProducts(ProductFilter filter);
+        PagedProductDto GetProducts(ProductFilter filter);
 
         /// <summary>
         /// Товар по идентификатору

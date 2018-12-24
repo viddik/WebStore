@@ -43,13 +43,13 @@ namespace WebStore.Clients.Services.Products
             var url = $"{ServiceAddress}/brands/{id}";
             var result = Get<BrandDto>(url);
             return result;
-        }
+        }
 
-        public IEnumerable<ProductDto> GetProducts(ProductFilter filter)
+        public PagedProductDto GetProducts(ProductFilter filter)
         {
             var url = $"{ServiceAddress}";
             var response = Post(url, filter);
-            return response.Content.ReadAsAsync<IEnumerable<ProductDto>>().Result;
+            return response.Content.ReadAsAsync<PagedProductDto>().Result;
         }
 
         public ProductDto GetProductById(int id)

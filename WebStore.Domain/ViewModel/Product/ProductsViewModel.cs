@@ -7,5 +7,7 @@ namespace WebStore.Domain.ViewModel.Product
         public string Title { get; set; }
 
         public IEnumerable<ProductItemViewModel> Products { get; set; }
+
+        public PageViewModel PageViewModel { get; set; }
     }
 }

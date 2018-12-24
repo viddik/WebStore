@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System.Linq;
 using WebStore.Domain.Filters;
+using WebStore.Domain.ViewModel;
 using WebStore.Domain.ViewModel.Product;
 using WebStore.Interfaces.Services;
 
@@ -9,19 +11,24 @@ namespace WebStore.Controllers
     public class CatalogController : Controller
     {
         private IProductData _productData;
+        private readonly IConfiguration _configuration;
 
-        public CatalogController(IProductData productData)
+        public CatalogController(IProductData productData, IConfiguration configuration)
         {
             _productData = productData;
+            _configuration = configuration;
         }
 
-        public IActionResult Shop(int? sectionId, int? brandId)
+        public IActionResult Shop(int? sectionId, int? brandId, int page = 1)
         {
+            int.TryParse(_configuration["PageSize"], out int pageSize);
             var products = _productData.GetProducts(
                 new ProductFilter
                 {
                     BrandId = brandId,
-                    SectionId = sectionId
+                    SectionId = sectionId,
+                    Page = page,
+                    PageSize = pageSize
                 }
             );
 
@@ -44,7 +51,7 @@ namespace WebStore.Controllers
                 ProductsViewModel = new ProductsViewModel()
                 {
                     Title = title,
-                    Products = products.Select(p =>
+                    Products = products.Products.Select(p =>
                         new ProductItemViewModel()
                         {
                             Id = p.Id,
@@ -54,7 +61,13 @@ namespace WebStore.Controllers
                             Price = p.Price,
                             Brand = p.Brand != null ? p.Brand.Name : string.Empty
                         }
-                    ).OrderBy(p => p.Order).ToList()
+                    ).OrderBy(p => p.Order).ToList(),
+                    PageViewModel = new PageViewModel
+                    {
+                        PageSize = pageSize,
+                        PageNumber = page,
+                        TotalItems = products.TotalCount
+                    }
                 }
             };
 

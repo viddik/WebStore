@@ -91,7 +91,8 @@ namespace WebStore.Services.CartService
                 new ProductFilter()
                 {
                     Ids = _cartStore.Cart.Items.Select(i => i.ProductId).ToList()
-                }).Select(p => new ProductItemViewModel()
+                }).Products
+                .Select(p => new ProductItemViewModel()
                     {
                         Id = p.Id,
                         ImageUrl = p.ImageUrl,
@@ -114,7 +115,8 @@ namespace WebStore.Services.CartService
                 new ProductFilter()
                 {
                     Ids = _cartStore.Cart.Items.Select(i => i.ProductId).ToList()
-                }).Select(p => new OrderItemDto()
+                }).Products
+                .Select(p => new OrderItemDto()
                     {
                         ProductId = p.Id,
                         Price = p.Price

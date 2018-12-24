@@ -24,7 +24,6 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Services\" />
     <Folder Include="Views\Home\Partial\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -20,5 +20,15 @@ namespace WebStore.Domain.Filters
         /// Идентификаторы товаров
         /// </summary>
         public IList<int> Ids { get; set; }
+
+        /// <summary>
+        /// Текущая страница
+        /// </summary>
+        public int Page { get; set; }
+
+        /// <summary>
+        /// Количество элементов на странице
+        /// </summary>
+        public int? PageSize { get; set; }
     }
 }
